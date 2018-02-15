@@ -8,8 +8,6 @@ import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
 import com.waracle.androidtest.shared.networking.JsonArrayConvertor;
 import com.waracle.androidtest.shared.networking.JsonHttpDataLoader;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -21,13 +19,9 @@ public class ImageListLoader {
             "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
 
     public static @NonNull IO<Failable<ArrayList<ImageItem>>> loadImages() {
-        try {
-            return JsonHttpDataLoader.loadJsonData(
-                    new URL(JSON_URL),
-                    new JsonArrayConvertor<>(new ImageItemConvertor())
-            );
-        } catch (MalformedURLException exception) {
-            return new IO<>(new Failable<ArrayList<ImageItem>>(exception.getMessage()));
-        }
+        return JsonHttpDataLoader.loadJsonData(
+                JSON_URL,
+                new JsonArrayConvertor<>(new ImageItemConvertor())
+        );
     }
 }

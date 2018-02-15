@@ -43,7 +43,7 @@ public class ImageLoader {
     }
 
     private static byte[] loadImageData(String url) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        HttpURLConnection connection = UrlConnectionUtils.createConnection(url);
         InputStream inputStream = null;
         try {
             try {

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.waracle.androidtest.shared.utils.StreamUtils;
 import com.waracle.androidtest.shared.core.Failable;
 import com.waracle.androidtest.shared.core.IO;
+import com.waracle.androidtest.shared.utils.UrlConnectionUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,14 +19,14 @@ import java.util.ArrayList;
 
 public final class JsonHttpDataLoader {
     public static final @NonNull <T> IO<Failable<ArrayList<T>>> loadJsonData(
-            @NonNull final URL url,
+            @NonNull final String url,
             @NonNull final JsonArrayConvertor<T> jsonArrayConvertor
     ) {
         return new IO<>(new IO.IOOperation<Failable<ArrayList<T>>>() {
             @Override
             public @NonNull Failable<ArrayList<T>> doIOOperation() {
                 try {
-                    return doHttpCall((HttpURLConnection) url.openConnection(), jsonArrayConvertor);
+                    return doHttpCall(UrlConnectionUtils.createConnection(url), jsonArrayConvertor);
                 } catch (IOException exception) {
                     return new Failable(exception.getMessage());
                 }
