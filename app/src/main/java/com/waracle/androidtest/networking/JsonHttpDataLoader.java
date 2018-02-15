@@ -33,7 +33,8 @@ public final class JsonHttpDataLoader {
         });
     }
 
-    private static Failable<JSONArray> doHttpCall(HttpURLConnection urlConnection) {
+    private static @NonNull Failable<JSONArray> doHttpCall(@NonNull HttpURLConnection urlConnection) {
+        // Most of this code should really be solved via Retrofit + OkHttp
         try {
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
