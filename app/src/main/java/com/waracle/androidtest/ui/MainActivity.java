@@ -1,10 +1,11 @@
-package com.waracle.androidtest;
+package com.waracle.androidtest.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.waracle.androidtest.R;
 import com.waracle.androidtest.ui.PlaceholderFragment;
 
 
