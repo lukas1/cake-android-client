@@ -6,18 +6,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.waracle.androidtest.R;
+import com.waracle.androidtest.features.imagelist.viewmodel.ImageListViewModel;
+import com.waracle.androidtest.features.imagelist.viewmodel.ImageListViewModelFactory;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private ImageListViewModelFactory viewModelFactory = new ImageListViewModelFactory();
+    private ImageListViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initializeViewModel();
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
+        }
+    }
+
+    private void initializeViewModel() {
+        viewModel = (ImageListViewModel) getLastCustomNonConfigurationInstance();
+        if (viewModel == null) {
+            viewModel = viewModelFactory.createViewModel();
         }
     }
 
@@ -41,5 +56,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        return viewModel;
     }
 }
