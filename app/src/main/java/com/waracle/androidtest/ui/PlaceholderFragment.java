@@ -53,27 +53,7 @@ public final class PlaceholderFragment extends ListFragment {
         mAdapter = new MyAdapter(getActivity());
         mListView.setAdapter(mAdapter);
 
-        // Load data from net.
-        try {
-            JsonHttpDataLoader.loadJsonData(new URL(JSON_URL)).runAsync(new IO.IOCallback<Failable<JSONArray>>() {
-                @Override
-                public void callback(@NonNull Failable<JSONArray> value) {
-                    value.fold(new Failable.FailableFoldCallback<JSONArray>() {
-                        @Override
-                        public void foldValue(@NonNull JSONArray value) {
-                            mAdapter.setItems(value);
-                        }
-
-                        @Override
-                        public void foldError(@NonNull String error) {
-                            Log.e(TAG, error);
-                        }
-                    });
-                }
-            });
-        } catch (MalformedURLException exception) {
-            Log.e(TAG, exception.getMessage());
-        }
+        
     }
 
 

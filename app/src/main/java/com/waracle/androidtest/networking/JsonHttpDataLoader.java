@@ -14,14 +14,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public final class JsonHttpDataLoader {
-    public static final @NonNull IO<Failable<JSONArray>> loadJsonData(@NonNull final URL url) {
-        return new IO<>(new IO.IOOperation<Failable<JSONArray>>() {
+    public static final @NonNull <T> IO<Failable<ArrayList<T>>> loadJsonData(
+            @NonNull final URL url,
+            @NonNull final JsonArrayConvertor<T> jsonArrayConvertor
+    ) {
+        return new IO<>(new IO.IOOperation<Failable<ArrayList<T>>>() {
             @Override
-            public @NonNull Failable<JSONArray> doIOOperation() {
+            public @NonNull Failable<ArrayList<T>> doIOOperation() {
                 try {
-                    return doHttpCall((HttpURLConnection) url.openConnection());
+                    return doHttpCall((HttpURLConnection) url.openConnection(), jsonArrayConvertor);
                 } catch (IOException exception) {
                     return new Failable(exception.getMessage());
                 }
@@ -29,7 +33,10 @@ public final class JsonHttpDataLoader {
         });
     }
 
-    private static @NonNull Failable<JSONArray> doHttpCall(@NonNull HttpURLConnection urlConnection) {
+    private static @NonNull <T> Failable<ArrayList<T>> doHttpCall(
+            @NonNull HttpURLConnection urlConnection,
+            @NonNull final JsonArrayConvertor<T> jsonArrayConvertor
+    ) {
         // Most of this code should really be solved via Retrofit + OkHttp
         try {
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
@@ -48,7 +55,9 @@ public final class JsonHttpDataLoader {
             String jsonText = new String(bytes, charset);
 
             // Read string as JSON.
-            return new Failable(new JSONArray(jsonText));
+            JSONArray jsonArray = new JSONArray(jsonText);
+
+            return new Failable(jsonArrayConvertor.convertJsonArray(jsonArray));
         } catch (IOException | JSONException exception) {
             return new Failable(exception.getMessage());
         } finally {

@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.waracle.androidtest.R;
-import com.waracle.androidtest.ui.PlaceholderFragment;
 
 
 public class MainActivity extends AppCompatActivity {
