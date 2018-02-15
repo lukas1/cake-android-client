@@ -12,12 +12,10 @@ import android.widget.ListView;
 import com.waracle.androidtest.R;
 import com.waracle.androidtest.core.Failable;
 import com.waracle.androidtest.core.IO;
-import com.waracle.androidtest.networking.JsonHttpDataLoader;
+import com.waracle.androidtest.dataclasses.ImageItem;
+import com.waracle.androidtest.networking.ImageListLoader;
 
-import org.json.JSONArray;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Fragment is responsible for loading in some JSON and
@@ -27,8 +25,6 @@ import java.net.URL;
  * Use good coding practices to make code more secure
  */
 public final class PlaceholderFragment extends ListFragment {
-    private static final String JSON_URL = "https://gist.githubusercontent.com/hart88/198f29ec5114a3ec3460/" +
-            "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
 
     private static final String TAG = PlaceholderFragment.class.getSimpleName();
 
@@ -53,7 +49,23 @@ public final class PlaceholderFragment extends ListFragment {
         mAdapter = new MyAdapter(getActivity());
         mListView.setAdapter(mAdapter);
 
-        
+        // Load data from net.
+        ImageListLoader.loadImages().runAsync(new IO.IOCallback<Failable<ArrayList<ImageItem>>>() {
+            @Override
+            public void callback(@NonNull Failable<ArrayList<ImageItem>> value) {
+                value.fold(new Failable.FailableFoldCallback<ArrayList<ImageItem>>() {
+                    @Override
+                    public void foldValue(@NonNull ArrayList<ImageItem> value) {
+                        mAdapter.setItems(value);
+                    }
+
+                    @Override
+                    public void foldError(@NonNull String error) {
+                        Log.e(TAG, error);
+                    }
+                });
+            }
+        });
     }
 
 

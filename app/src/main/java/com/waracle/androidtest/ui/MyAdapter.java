@@ -2,7 +2,6 @@ package com.waracle.androidtest.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,40 +11,33 @@ import android.widget.TextView;
 
 import com.waracle.androidtest.ImageLoader;
 import com.waracle.androidtest.R;
+import com.waracle.androidtest.dataclasses.ImageItem;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
 
 final class MyAdapter extends BaseAdapter {
     private final ImageLoader imageLoader = new ImageLoader();
     private final Context context;
 
-    // Can you think of a better way to represent these items???
-    private JSONArray items;
+    private ArrayList<ImageItem> items;
 
     public MyAdapter(Context context) {
-        this(context, new JSONArray());
+        this(context, new ArrayList<ImageItem>());
     }
 
-    public MyAdapter(Context context, JSONArray items) {
+    public MyAdapter(Context context, ArrayList<ImageItem> items) {
         this.context = context;
         this.items = items;
     }
 
     @Override
     public int getCount() {
-        return items.length();
+        return items.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        try {
-            return items.getJSONObject(position);
-        } catch (JSONException e) {
-            Log.e("", e.getMessage());
-        }
-        return null;
+    public ImageItem getItem(int position) {
+        return items.get(position);
     }
 
     @Override
@@ -62,20 +54,18 @@ final class MyAdapter extends BaseAdapter {
             TextView title = root.findViewById(R.id.title);
             TextView desc = root.findViewById(R.id.desc);
             ImageView image = root.findViewById(R.id.image);
-            try {
-                JSONObject object = (JSONObject) getItem(position);
-                title.setText(object.getString("title"));
-                desc.setText(object.getString("desc"));
-                imageLoader.load(object.getString("image"), image);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+            ImageItem imageItem = getItem(position);
+            title.setText(imageItem.getTitle());
+            desc.setText(imageItem.getDescription());
+            imageLoader.load(imageItem.getImageUrl(), image);
         }
 
         return root;
     }
 
-    public void setItems(JSONArray items) {
+    public void setItems(ArrayList<ImageItem> items) {
         this.items = items;
+        notifyDataSetChanged();
     }
 }
