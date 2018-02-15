@@ -2,6 +2,7 @@ package com.waracle.androidtest;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.waracle.androidtest.core.Failable;
+import com.waracle.androidtest.core.IO;
+import com.waracle.androidtest.networking.JsonHttpDataLoader;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +28,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 
@@ -98,57 +104,25 @@ public class MainActivity extends AppCompatActivity {
 
             // Load data from net.
             try {
-                JSONArray array = loadData();
-                mAdapter.setItems(array);
-            } catch (IOException | JSONException e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
+                JsonHttpDataLoader.loadJsonData(new URL(JSON_URL)).runAsync(new IO.IOCallback<Failable<JSONArray>>() {
+                    @Override
+                    public void callback(@NonNull Failable<JSONArray> value) {
+                        value.fold(new Failable.FailableFoldCallback<JSONArray>() {
+                            @Override
+                            public void foldValue(@NonNull JSONArray value) {
+                                mAdapter.setItems(value);
+                            }
 
-
-        private JSONArray loadData() throws IOException, JSONException {
-            URL url = new URL(JSON_URL);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            try {
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-                // Can you think of a way to improve the performance of loading data
-                // using HTTP headers???
-
-                // Also, Do you trust any utils thrown your way????
-
-                byte[] bytes = StreamUtils.readUnknownFully(in);
-
-                // Read in charset of HTTP content.
-                String charset = parseCharset(urlConnection.getRequestProperty("Content-Type"));
-
-                // Convert byte array to appropriate encoded string.
-                String jsonText = new String(bytes, charset);
-
-                // Read string as JSON.
-                return new JSONArray(jsonText);
-            } finally {
-                urlConnection.disconnect();
-            }
-        }
-
-        /**
-         * Returns the charset specified in the Content-Type of this header,
-         * or the HTTP default (ISO-8859-1) if none can be found.
-         */
-        public static String parseCharset(String contentType) {
-            if (contentType != null) {
-                String[] params = contentType.split(",");
-                for (int i = 1; i < params.length; i++) {
-                    String[] pair = params[i].trim().split("=");
-                    if (pair.length == 2) {
-                        if (pair[0].equals("charset")) {
-                            return pair[1];
-                        }
+                            @Override
+                            public void foldError(@NonNull String error) {
+                                Log.e(TAG, error);
+                            }
+                        });
                     }
-                }
+                });
+            } catch (MalformedURLException exception) {
+                Log.e(TAG, exception.getMessage());
             }
-            return "UTF-8";
         }
 
         private class MyAdapter extends BaseAdapter {
