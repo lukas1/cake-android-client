@@ -33,6 +33,16 @@ public final class IO<T> {
         };
     }
 
+    public final <U> IO<U> map(@NonNull final Transform<T, U> transform) {
+        return new IO<>(new IOOperation<U>() {
+            @NonNull
+            @Override
+            public U doIOOperation() {
+                return transform.transform(operation.doIOOperation());
+            }
+        });
+    }
+
     public final void runAsync(@NonNull final IOCallback<T> callback) {
         final Handler mainHandler = new Handler(Looper.getMainLooper());
         new Thread(new Runnable() {
