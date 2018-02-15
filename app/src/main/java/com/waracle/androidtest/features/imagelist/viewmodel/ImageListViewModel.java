@@ -22,6 +22,10 @@ public class ImageListViewModel {
         return images;
     }
 
+    public void refresh() {
+        loadImages();
+    }
+
     private void loadImages() {
         context.imageListLoader.loadImages(context).runAsync(new IO.IOCallback<Failable<ArrayList<ImageItem>>>() {
             @Override
