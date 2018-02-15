@@ -14,11 +14,10 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 public final class JsonHttpDataLoader {
-    public static final @NonNull <T> IO<Failable<ArrayList<T>>> loadJsonData(
+    public final @NonNull <T> IO<Failable<ArrayList<T>>> loadJsonData(
             @NonNull final String url,
             @NonNull final JsonArrayConvertor<T> jsonArrayConvertor
     ) {

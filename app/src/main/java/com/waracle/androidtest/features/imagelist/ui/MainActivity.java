@@ -9,7 +9,6 @@ import com.waracle.androidtest.R;
 import com.waracle.androidtest.features.imagelist.viewmodel.ImageListViewModel;
 import com.waracle.androidtest.features.imagelist.viewmodel.ImageListViewModelFactory;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private ImageListViewModelFactory viewModelFactory = new ImageListViewModelFactory();
@@ -22,11 +21,12 @@ public class MainActivity extends AppCompatActivity {
 
         initializeViewModel();
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        // Ideally Fragment should not be used at all, but since this is ListFragment that handles
+        // lot of logic that I don't want to deal with and I'm not allowed to use RecyclerView
+        // I'll keep using this hack. Proper solution is to get rid of this fragment completely
+        // and use RecyclerView
+        PlaceholderFragment fragment = (PlaceholderFragment) getSupportFragmentManager().findFragmentById(R.id.placeholder_fragment);
+        fragment.setImagesLiveData(viewModel.getImages());
     }
 
     private void initializeViewModel() {
