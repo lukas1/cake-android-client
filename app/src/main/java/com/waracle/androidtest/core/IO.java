@@ -23,6 +23,16 @@ public final class IO<T> {
         this.operation = operation;
     }
 
+    public IO(@NonNull final T pureValue) {
+        operation = new IOOperation<T>() {
+            @NonNull
+            @Override
+            public T doIOOperation() {
+                return pureValue;
+            }
+        };
+    }
+
     public final void runAsync(@NonNull final IOCallback<T> callback) {
         final Handler mainHandler = new Handler(Looper.getMainLooper());
         new Thread(new Runnable() {
