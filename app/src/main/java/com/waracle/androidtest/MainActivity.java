@@ -1,41 +1,14 @@
 package com.waracle.androidtest;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.waracle.androidtest.core.Failable;
-import com.waracle.androidtest.core.IO;
-import com.waracle.androidtest.networking.JsonHttpDataLoader;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.waracle.androidtest.ui.PlaceholderFragment;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    private static String JSON_URL = "https://gist.githubusercontent.com/hart88/198f29ec5114a3ec3460/" +
-            "raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,123 +41,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Fragment is responsible for loading in some JSON and
-     * then displaying a list of cakes with images.
-     * Fix any crashes
-     * Improve any performance issues
-     * Use good coding practices to make code more secure
-     */
-    public static class PlaceholderFragment extends ListFragment {
-
-        private static final String TAG = PlaceholderFragment.class.getSimpleName();
-
-        private ListView mListView;
-        private MyAdapter mAdapter;
-
-        public PlaceholderFragment() { /**/ }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            mListView = rootView.findViewById(android.R.id.list);
-            return rootView;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-            // Create and set the list adapter.
-            mAdapter = new MyAdapter();
-            mListView.setAdapter(mAdapter);
-
-            // Load data from net.
-            try {
-                JsonHttpDataLoader.loadJsonData(new URL(JSON_URL)).runAsync(new IO.IOCallback<Failable<JSONArray>>() {
-                    @Override
-                    public void callback(@NonNull Failable<JSONArray> value) {
-                        value.fold(new Failable.FailableFoldCallback<JSONArray>() {
-                            @Override
-                            public void foldValue(@NonNull JSONArray value) {
-                                mAdapter.setItems(value);
-                            }
-
-                            @Override
-                            public void foldError(@NonNull String error) {
-                                Log.e(TAG, error);
-                            }
-                        });
-                    }
-                });
-            } catch (MalformedURLException exception) {
-                Log.e(TAG, exception.getMessage());
-            }
-        }
-
-        private class MyAdapter extends BaseAdapter {
-
-            // Can you think of a better way to represent these items???
-            private JSONArray mItems;
-            private ImageLoader mImageLoader;
-
-            public MyAdapter() {
-                this(new JSONArray());
-            }
-
-            public MyAdapter(JSONArray items) {
-                mItems = items;
-                mImageLoader = new ImageLoader();
-            }
-
-            @Override
-            public int getCount() {
-                return mItems.length();
-            }
-
-            @Override
-            public Object getItem(int position) {
-                try {
-                    return mItems.getJSONObject(position);
-                } catch (JSONException e) {
-                    Log.e("", e.getMessage());
-                }
-                return null;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return 0;
-            }
-
-            @SuppressLint("ViewHolder")
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                LayoutInflater inflater = LayoutInflater.from(getActivity());
-                View root = inflater.inflate(R.layout.list_item_layout, parent, false);
-                if (root != null) {
-                    TextView title = (TextView) root.findViewById(R.id.title);
-                    TextView desc = (TextView) root.findViewById(R.id.desc);
-                    ImageView image = (ImageView) root.findViewById(R.id.image);
-                    try {
-                        JSONObject object = (JSONObject) getItem(position);
-                        title.setText(object.getString("title"));
-                        desc.setText(object.getString("desc"));
-                        mImageLoader.load(object.getString("image"), image);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                return root;
-            }
-
-            public void setItems(JSONArray items) {
-                mItems = items;
-            }
-        }
     }
 }

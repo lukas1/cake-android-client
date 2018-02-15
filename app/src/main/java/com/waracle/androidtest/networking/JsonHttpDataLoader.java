@@ -15,10 +15,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by lukas on 15/02/2018.
- */
-
 public final class JsonHttpDataLoader {
     public static final @NonNull IO<Failable<JSONArray>> loadJsonData(@NonNull final URL url) {
         return new IO<>(new IO.IOOperation<Failable<JSONArray>>() {
