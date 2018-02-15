@@ -1,10 +1,12 @@
-package com.waracle.androidtest.networking;
+package com.waracle.androidtest.features.imagelist.dataaccess;
 
 import android.support.annotation.NonNull;
 
-import com.waracle.androidtest.core.Failable;
-import com.waracle.androidtest.core.IO;
-import com.waracle.androidtest.dataclasses.ImageItem;
+import com.waracle.androidtest.shared.core.Failable;
+import com.waracle.androidtest.shared.core.IO;
+import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
+import com.waracle.androidtest.shared.networking.JsonArrayConvertor;
+import com.waracle.androidtest.shared.networking.JsonHttpDataLoader;
 
 import java.net.MalformedURLException;
 import java.net.URL;

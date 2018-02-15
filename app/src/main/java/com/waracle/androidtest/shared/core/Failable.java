@@ -1,4 +1,4 @@
-package com.waracle.androidtest.core;
+package com.waracle.androidtest.shared.core;
 
 import android.support.annotation.NonNull;
 

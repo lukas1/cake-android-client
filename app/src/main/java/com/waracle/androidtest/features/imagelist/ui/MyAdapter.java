@@ -1,4 +1,4 @@
-package com.waracle.androidtest.ui;
+package com.waracle.androidtest.features.imagelist.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,9 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.waracle.androidtest.ImageLoader;
+import com.waracle.androidtest.shared.utils.ImageLoader;
 import com.waracle.androidtest.R;
-import com.waracle.androidtest.dataclasses.ImageItem;
+import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
 
 import java.util.ArrayList;
 

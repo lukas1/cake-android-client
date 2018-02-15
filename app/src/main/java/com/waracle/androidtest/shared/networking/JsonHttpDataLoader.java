@@ -1,10 +1,10 @@
-package com.waracle.androidtest.networking;
+package com.waracle.androidtest.shared.networking;
 
 import android.support.annotation.NonNull;
 
-import com.waracle.androidtest.StreamUtils;
-import com.waracle.androidtest.core.Failable;
-import com.waracle.androidtest.core.IO;
+import com.waracle.androidtest.shared.utils.StreamUtils;
+import com.waracle.androidtest.shared.core.Failable;
+import com.waracle.androidtest.shared.core.IO;
 
 import org.json.JSONArray;
 import org.json.JSONException;

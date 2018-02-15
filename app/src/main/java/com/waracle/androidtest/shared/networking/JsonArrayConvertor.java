@@ -1,4 +1,4 @@
-package com.waracle.androidtest.networking;
+package com.waracle.androidtest.shared.networking;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.waracle.androidtest.ui;
+package com.waracle.androidtest.features.imagelist.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.waracle.androidtest.R;
-import com.waracle.androidtest.core.Failable;
-import com.waracle.androidtest.core.IO;
-import com.waracle.androidtest.dataclasses.ImageItem;
-import com.waracle.androidtest.networking.ImageListLoader;
+import com.waracle.androidtest.shared.core.Failable;
+import com.waracle.androidtest.shared.core.IO;
+import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
+import com.waracle.androidtest.features.imagelist.dataaccess.ImageListLoader;
 
 import java.util.ArrayList;
 

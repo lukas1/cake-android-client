@@ -1,4 +1,4 @@
-package com.waracle.androidtest.dataclasses;
+package com.waracle.androidtest.features.imagelist.dataclasses;
 
 public final class ImageItem {
     private final String title;

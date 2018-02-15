@@ -1,8 +1,9 @@
-package com.waracle.androidtest.networking;
+package com.waracle.androidtest.features.imagelist.dataaccess;
 
 import android.support.annotation.NonNull;
 
-import com.waracle.androidtest.dataclasses.ImageItem;
+import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
+import com.waracle.androidtest.shared.networking.JsonObjectConvertor;
 
 import org.json.JSONException;
 import org.json.JSONObject;

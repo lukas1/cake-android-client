@@ -1,4 +1,4 @@
-package com.waracle.androidtest.ui;
+package com.waracle.androidtest.features.imagelist.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
