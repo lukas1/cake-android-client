@@ -3,6 +3,7 @@ package com.waracle.androidtest.shared.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
@@ -62,31 +63,53 @@ public class ImageLoader {
         }
     }
 
-    private static IO<Failable<Bitmap>> loadImageData(@NonNull final String url) {
+    private static @NonNull IO<Failable<Bitmap>> loadImageData(@NonNull final String url) {
         return new IO<>(new IO.IOOperation<Failable<Bitmap>>() {
             @NonNull
             @Override
             public Failable<Bitmap> doIOOperation() {
-                try {
-                    return doHttpCall(UrlConnectionUtils.createConnection(url));
-                } catch (IOException exception) {
-                    return new Failable<>(exception.getMessage());
-                }
+                return doLoadImageData(url);
             }
         });
+    }
+
+    private static @NonNull Failable<Bitmap> doLoadImageData(@NonNull final String url) {
+        try {
+            return doHttpCall(UrlConnectionUtils.createConnection(url));
+        } catch (IOException exception) {
+            return new Failable<>(exception.getMessage());
+        }
     }
 
     private static @NonNull Failable<Bitmap> doHttpCall(@NonNull HttpURLConnection connection) {
         InputStream inputStream = null;
         try {
-            try {
-                connection.setUseCaches(true);
+            connection.setUseCaches(true);
+            connection.setInstanceFollowRedirects(true);
+            inputStream = connection.getInputStream();
+
+            int httpResponseCode = connection.getResponseCode();
+            if (httpResponseCode == HttpURLConnection.HTTP_OK) {
                 inputStream = connection.getInputStream();
-            } catch (IOException e) {
-                // Read the error from the workstation
-                inputStream = connection.getErrorStream();
+
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                if (bitmap != null) {
+                    return new Failable<>(bitmap);
+                } else {
+                    return new Failable<>(
+                            "Failed to load bitmap: " + connection.getURL().toString()
+                    );
+                }
+            } else if (httpResponseCode == HttpURLConnection.HTTP_MOVED_PERM) {
+                return doLoadImageData(connection.getHeaderField("Location"));
+            } else {
+                return new Failable<>(
+                        "Loading image at url" + connection.getURL().toString()
+                        + " failed with HTTP CODDE " + httpResponseCode
+                );
             }
-            return new Failable<>(BitmapFactory.decodeStream(inputStream));
+        } catch (IOException exception) {
+            return new Failable<>(exception.getMessage());
         } finally {
             // Close the input stream if it exists.
             StreamUtils.close(inputStream);
@@ -96,7 +119,7 @@ public class ImageLoader {
         }
     }
 
-    private static void setImageView(WeakReference<ImageView> imageView, Bitmap bitmap) {
+    private static void setImageView(@NonNull WeakReference<ImageView> imageView, @Nullable Bitmap bitmap) {
         if (imageView.get() != null) {
             imageView.get().setImageBitmap(bitmap);
         }
