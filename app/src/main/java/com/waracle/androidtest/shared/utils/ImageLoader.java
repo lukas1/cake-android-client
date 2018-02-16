@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.waracle.androidtest.shared.core.Failable;
 import com.waracle.androidtest.shared.core.IO;
-import com.waracle.androidtest.shared.core.Transform;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +35,7 @@ public class ImageLoader {
             throw new InvalidParameterException("URL is empty!");
         }
 
-        getBitmapIO(url).runAsync(new IO.IOCallback<Failable<Bitmap>>() {
+        loadImageData(url).runAsync(new IO.IOCallback<Failable<Bitmap>>() {
             @Override
             public void callback(@NonNull Failable<Bitmap> value) {
                 value.fold(new Failable.FailableFoldCallback<Bitmap>() {
@@ -54,25 +53,11 @@ public class ImageLoader {
         });
     }
 
-    private IO<Failable<Bitmap>> getBitmapIO(@NonNull String url) {
-        return loadImageData(url).map(new Transform<Failable<byte[]>, Failable<Bitmap>>() {
-            @Override
-            public Failable<Bitmap> transform(Failable<byte[]> input) {
-                return input.map(new Transform<byte[], Bitmap>() {
-                    @Override
-                    public Bitmap transform(byte[] input) {
-                        return convertToBitmap(input);
-                    }
-                });
-            }
-        });
-    }
-
-    private static IO<Failable<byte[]>> loadImageData(@NonNull final String url) {
-        return new IO<>(new IO.IOOperation<Failable<byte[]>>() {
+    private static IO<Failable<Bitmap>> loadImageData(@NonNull final String url) {
+        return new IO<>(new IO.IOOperation<Failable<Bitmap>>() {
             @NonNull
             @Override
-            public Failable<byte[]> doIOOperation() {
+            public Failable<Bitmap> doIOOperation() {
                 try {
                     return doHttpCall(UrlConnectionUtils.createConnection(url));
                 } catch (IOException exception) {
@@ -82,20 +67,17 @@ public class ImageLoader {
         });
     }
 
-    private static @NonNull Failable<byte[]> doHttpCall(@NonNull HttpURLConnection connection) {
+    private static @NonNull Failable<Bitmap> doHttpCall(@NonNull HttpURLConnection connection) {
         InputStream inputStream = null;
         try {
             try {
-                // Read data from workstation
                 connection.setUseCaches(true);
                 inputStream = connection.getInputStream();
             } catch (IOException e) {
                 // Read the error from the workstation
                 inputStream = connection.getErrorStream();
             }
-            return new Failable<>(StreamUtils.readUnknownFully(inputStream));
-        } catch (IOException exception) {
-            return new Failable<>(exception.getMessage());
+            return new Failable<>(BitmapFactory.decodeStream(inputStream));
         } finally {
             // Close the input stream if it exists.
             StreamUtils.close(inputStream);
@@ -103,10 +85,6 @@ public class ImageLoader {
             // Disconnect the connection
             connection.disconnect();
         }
-    }
-
-    private static Bitmap convertToBitmap(byte[] data) {
-        return BitmapFactory.decodeByteArray(data, 0, data.length);
     }
 
     private static void setImageView(ImageView imageView, Bitmap bitmap) {
