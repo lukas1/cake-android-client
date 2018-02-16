@@ -12,8 +12,10 @@ import com.waracle.androidtest.shared.core.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.security.InvalidParameterException;
+import java.util.HashMap;
 
 /**
  * Created by Riad on 20/05/2015.
@@ -21,6 +23,8 @@ import java.security.InvalidParameterException;
 public class ImageLoader {
 
     private static final String TAG = ImageLoader.class.getSimpleName();
+
+    private final HashMap<String, Bitmap> cache = new HashMap<>();
 
     public ImageLoader() { /**/ }
 
@@ -30,27 +34,32 @@ public class ImageLoader {
      * @param url       image url
      * @param imageView view to set image too.
      */
-    public void load(@NonNull String url, @NonNull final ImageView imageView) {
+    public void load(@NonNull final String url, @NonNull final WeakReference<ImageView> imageView) {
         if (TextUtils.isEmpty(url)) {
             throw new InvalidParameterException("URL is empty!");
         }
 
-        loadImageData(url).runAsync(new IO.IOCallback<Failable<Bitmap>>() {
-            @Override
-            public void callback(@NonNull Failable<Bitmap> value) {
-                value.fold(new Failable.FailableFoldCallback<Bitmap>() {
-                    @Override
-                    public void foldValue(@NonNull Bitmap value) {
-                        setImageView(imageView, value);
-                    }
+        if (cache.get(url) != null) {
+            setImageView(imageView, cache.get(url));
+        } else {
+            loadImageData(url).runAsync(new IO.IOCallback<Failable<Bitmap>>() {
+                @Override
+                public void callback(@NonNull Failable<Bitmap> value) {
+                    value.fold(new Failable.FailableFoldCallback<Bitmap>() {
+                        @Override
+                        public void foldValue(@NonNull Bitmap value) {
+                            cache.put(url, value);
+                            setImageView(imageView, value);
+                        }
 
-                    @Override
-                    public void foldError(@NonNull String error) {
-                        Log.e(TAG, error);
-                    }
-                });
-            }
-        });
+                        @Override
+                        public void foldError(@NonNull String error) {
+                            Log.e(TAG, error);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private static IO<Failable<Bitmap>> loadImageData(@NonNull final String url) {
@@ -87,7 +96,9 @@ public class ImageLoader {
         }
     }
 
-    private static void setImageView(ImageView imageView, Bitmap bitmap) {
-        imageView.setImageBitmap(bitmap);
+    private static void setImageView(WeakReference<ImageView> imageView, Bitmap bitmap) {
+        if (imageView.get() != null) {
+            imageView.get().setImageBitmap(bitmap);
+        }
     }
 }

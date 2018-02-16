@@ -9,14 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.waracle.androidtest.CakeApplication;
 import com.waracle.androidtest.shared.utils.ImageLoader;
 import com.waracle.androidtest.R;
 import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 final class MyAdapter extends BaseAdapter {
-    private final ImageLoader imageLoader = new ImageLoader();
+    private final ImageLoader imageLoader = CakeApplication.getAppInstance().getImageLoader();
     private final Context context;
 
     private ArrayList<ImageItem> items;
@@ -58,7 +60,7 @@ final class MyAdapter extends BaseAdapter {
             ImageItem imageItem = getItem(position);
             title.setText(imageItem.getTitle());
             desc.setText(imageItem.getDescription());
-            imageLoader.load(imageItem.getImageUrl(), image);
+            imageLoader.load(imageItem.getImageUrl(), new WeakReference(image));
         }
 
         return root;

@@ -5,6 +5,7 @@ import android.net.http.HttpResponseCache;
 import android.util.Log;
 
 import com.waracle.androidtest.features.imagelist.ui.PlaceholderFragment;
+import com.waracle.androidtest.shared.utils.ImageLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,10 +16,14 @@ import java.io.IOException;
 
 public class CakeApplication extends Application {
     private static final String TAG = PlaceholderFragment.class.getSimpleName();
+    private static CakeApplication appInstance = null;
+
+    private final ImageLoader imageLoader = new ImageLoader();
 
     @Override
     public void onCreate() {
         super.onCreate();
+        appInstance = this;
 
         try {
             File httpCacheDir = new File(getCacheDir(), "http");
@@ -27,5 +32,13 @@ public class CakeApplication extends Application {
         } catch (IOException e) {
             Log.i(TAG, "HttpResponseCache installation failed:" + e); // Timber should be used for logging
         }
+    }
+
+    public ImageLoader getImageLoader() {
+        return imageLoader;
+    }
+
+    public static CakeApplication getAppInstance() {
+        return appInstance;
     }
 }
