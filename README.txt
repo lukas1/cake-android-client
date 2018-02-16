@@ -24,3 +24,33 @@ This is your opportunity to show us how you think and Android app should be arch
 
 The test should take around 2 hours, certainly no longer than 3 hours. Good luck!
 
+***
+Notes by me
+***
+
+Testing - there are no unit tests, because adding libraries is forbidden in the exercise and unit tests without JUnit is a torture.
+
+Listview - since no libraries are allowed, project utilizes ListView, although it should really use RecyclerView
+
+Loading images - this should just be handled by Picasso or Glide or other library, again libraries are not allowed
+
+HTTP REST API - this should be done by Retrofit together with Gson or Moshi for JSON parsing, however libraries are not allowed
+
+Asynchrony - Picasso and Retrofit would actually solve asynchronous calls on background thread. Since no libraries are allowed,
+instead IO is used, a type, that returns immediately, but the operation is run later, similar to Future-Promise, or RxJava's Observable.
+A new thread is created for each async operation. Ideally there should be a thread pool used to limit amount of active threads, but
+that's too time consuming for this demo. Anyway, for these types of tasks Kotlin's coroutines are even better choice. Using Kotlin was
+however discouraged.
+Currently it's a bit difficult to test IO because it relies on Handler, but that could be solved by injecting async runner and for
+testing a synchronous runner could be used. Check out my HeroesDemo GitHub project to see it in action there.
+
+ViewModel - View Model is being kept alive by utilizing FragmentActivity's onRetainCustomNonConfigurationInstance()
+Activity can subscribe to updates from View Model by subscribing to LiveData of interest.
+
+CakeListLoadingContext - since no libraries are allowed, dependency injection is made more difficult.
+In this case I create a single CakeListLoadingContext object for loading cakes, that contains all
+dependencies needed down the line. This has the advantage of ease of testing. Theoretically I could write
+an integration test for ViewModel only, adding my own context to its constructor, avoiding mocking as much as possible.
+
+Not using AsyncTask or AsyncTaskLoader - these two should be considered an antipattern, they're clumsy, they're promoting keeping
+logic in activities or fragments and it's not easy to test them.

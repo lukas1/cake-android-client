@@ -44,7 +44,16 @@ public final class IO<T> {
     }
 
     public final void runAsync(@NonNull final IOCallback<T> callback) {
+        // Using handler here directly together with starting new thread makes this class
+        // not testable using Unit tests.
+        // This can be fixed by injecting async runner, that can be mocked for test purposes as
+        // a synchronous runner instead.
+        // This demo is not tested anyway, due to JUnit being forbidden on the project
         final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        // Ideally there should be a thread pool of limited number of threads to avoid spawning too
+        // many threads. I'm not solving this problem here, but threads should be avoided altogether
+        // now in favour of Kotlin's coroutines
         new Thread(new Runnable() {
             @Override
             public void run() {
