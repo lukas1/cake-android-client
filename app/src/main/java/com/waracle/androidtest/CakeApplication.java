@@ -4,7 +4,7 @@ import android.app.Application;
 import android.net.http.HttpResponseCache;
 import android.util.Log;
 
-import com.waracle.androidtest.features.imagelist.ui.PlaceholderFragment;
+import com.waracle.androidtest.features.cakelist.ui.PlaceholderFragment;
 import com.waracle.androidtest.shared.utils.ImageLoader;
 
 import java.io.File;

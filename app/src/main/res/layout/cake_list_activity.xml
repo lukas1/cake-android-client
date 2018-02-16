@@ -3,11 +3,11 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.imagelist.ui.MainActivity"
+    tools:context=".features.cakelist.ui.CakeListActivity"
     tools:ignore="MergeRootFrame"
     >
     <fragment
-        android:name="com.waracle.androidtest.features.imagelist.ui.PlaceholderFragment"
+        android:name="com.waracle.androidtest.features.cakelist.ui.PlaceholderFragment"
         android:id="@+id/placeholder_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

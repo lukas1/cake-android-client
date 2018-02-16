@@ -12,7 +12,7 @@
         android:name=".CakeApplication"
         >
         <activity
-            android:name=".features.imagelist.ui.MainActivity"
+            android:name=".features.cakelist.ui.CakeListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

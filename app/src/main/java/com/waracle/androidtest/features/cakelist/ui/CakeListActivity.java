@@ -1,4 +1,4 @@
-package com.waracle.androidtest.features.imagelist.ui;
+package com.waracle.androidtest.features.cakelist.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,18 +6,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.waracle.androidtest.R;
-import com.waracle.androidtest.features.imagelist.viewmodel.ImageListViewModel;
-import com.waracle.androidtest.features.imagelist.viewmodel.ImageListViewModelFactory;
+import com.waracle.androidtest.features.cakelist.viewmodel.CakeListViewModel;
+import com.waracle.androidtest.features.cakelist.viewmodel.CakeListViewModelFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class CakeListActivity extends AppCompatActivity {
 
-    private ImageListViewModelFactory viewModelFactory = new ImageListViewModelFactory();
-    private ImageListViewModel viewModel;
+    private CakeListViewModelFactory viewModelFactory = new CakeListViewModelFactory();
+    private CakeListViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.cake_list_activity);
 
         initializeViewModel();
 
@@ -26,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
         // I'll keep using this hack. Proper solution is to get rid of this fragment completely
         // and use RecyclerView
         PlaceholderFragment fragment = (PlaceholderFragment) getSupportFragmentManager().findFragmentById(R.id.placeholder_fragment);
-        fragment.setImagesLiveData(viewModel.getImages());
+        fragment.setCakesLiveData(viewModel.getCakes());
     }
 
     private void initializeViewModel() {
-        viewModel = (ImageListViewModel) getLastCustomNonConfigurationInstance();
+        viewModel = (CakeListViewModel) getLastCustomNonConfigurationInstance();
         if (viewModel == null) {
             viewModel = viewModelFactory.createViewModel();
         }

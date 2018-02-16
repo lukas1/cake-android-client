@@ -1,4 +1,4 @@
-package com.waracle.androidtest.features.imagelist.ui;
+package com.waracle.androidtest.features.cakelist.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.waracle.androidtest.R;
-import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
+import com.waracle.androidtest.features.cakelist.dataclasses.Cake;
 import com.waracle.androidtest.shared.core.LiveData;
 
 import java.util.ArrayList;
 
 /**
- * Fragment is responsible for subscribing to images LiveData
- * then displaying a list of cakes with images.
+ * Fragment is responsible for subscribing to cakes LiveData
+ * then displaying a list of cakes with cakes.
  * Improve any performance issues
  */
 public final class PlaceholderFragment extends ListFragment {
@@ -26,12 +26,12 @@ public final class PlaceholderFragment extends ListFragment {
     private static final String TAG = PlaceholderFragment.class.getSimpleName();
 
     private ListView listView;
-    private MyAdapter adapter;
+    private CakeAdapter adapter;
 
-    private LiveData<ArrayList<ImageItem>> images;
-    private final LiveData.Observer<ArrayList<ImageItem>> imagesObserver = new LiveData.Observer<ArrayList<ImageItem>>() {
+    private LiveData<ArrayList<Cake>> cakes;
+    private final LiveData.Observer<ArrayList<Cake>> cakesObserver = new LiveData.Observer<ArrayList<Cake>>() {
         @Override
-        public void onNext(@Nullable ArrayList<ImageItem> value) {
+        public void onNext(@Nullable ArrayList<Cake> value) {
             if (value == null) {
                 return;
             }
@@ -47,11 +47,11 @@ public final class PlaceholderFragment extends ListFragment {
 
     public PlaceholderFragment() { /**/ }
 
-    public final void setImagesLiveData(LiveData<ArrayList<ImageItem>> images) {
-        if (this.images != null) {
+    public final void setCakesLiveData(LiveData<ArrayList<Cake>> cakes) {
+        if (this.cakes != null) {
             unsubscribe();
         }
-        this.images = images;
+        this.cakes = cakes;
     }
 
     @Override
@@ -67,7 +67,7 @@ public final class PlaceholderFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         // Create and set the list adapter.
-        adapter = new MyAdapter(getActivity());
+        adapter = new CakeAdapter(getActivity());
         listView.setAdapter(adapter);
         subscribe();
     }
@@ -87,10 +87,10 @@ public final class PlaceholderFragment extends ListFragment {
     }
 
     private void subscribe() {
-        images.subscribe(imagesObserver);
+        cakes.subscribe(cakesObserver);
     }
 
     private void unsubscribe() {
-        images.unsubscribe(imagesObserver);
+        cakes.unsubscribe(cakesObserver);
     }
 }

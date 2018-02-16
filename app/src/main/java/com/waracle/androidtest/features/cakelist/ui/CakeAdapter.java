@@ -1,4 +1,4 @@
-package com.waracle.androidtest.features.imagelist.ui;
+package com.waracle.androidtest.features.cakelist.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,22 +12,22 @@ import android.widget.TextView;
 import com.waracle.androidtest.CakeApplication;
 import com.waracle.androidtest.shared.utils.ImageLoader;
 import com.waracle.androidtest.R;
-import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
+import com.waracle.androidtest.features.cakelist.dataclasses.Cake;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-final class MyAdapter extends BaseAdapter {
+final class CakeAdapter extends BaseAdapter {
     private final ImageLoader imageLoader = CakeApplication.getAppInstance().getImageLoader();
     private final Context context;
 
-    private ArrayList<ImageItem> items;
+    private ArrayList<Cake> items;
 
-    public MyAdapter(Context context) {
-        this(context, new ArrayList<ImageItem>());
+    public CakeAdapter(Context context) {
+        this(context, new ArrayList<Cake>());
     }
 
-    public MyAdapter(Context context, ArrayList<ImageItem> items) {
+    public CakeAdapter(Context context, ArrayList<Cake> items) {
         this.context = context;
         this.items = items;
     }
@@ -38,7 +38,7 @@ final class MyAdapter extends BaseAdapter {
     }
 
     @Override
-    public ImageItem getItem(int position) {
+    public Cake getItem(int position) {
         return items.get(position);
     }
 
@@ -57,16 +57,16 @@ final class MyAdapter extends BaseAdapter {
             TextView desc = root.findViewById(R.id.desc);
             ImageView image = root.findViewById(R.id.image);
 
-            ImageItem imageItem = getItem(position);
-            title.setText(imageItem.getTitle());
-            desc.setText(imageItem.getDescription());
-            imageLoader.load(imageItem.getImageUrl(), new WeakReference(image));
+            Cake cake = getItem(position);
+            title.setText(cake.getTitle());
+            desc.setText(cake.getDescription());
+            imageLoader.load(cake.getImageUrl(), new WeakReference(image));
         }
 
         return root;
     }
 
-    public void setItems(ArrayList<ImageItem> items) {
+    public void setItems(ArrayList<Cake> items) {
         this.items = items;
         notifyDataSetChanged();
     }
