@@ -10,7 +10,7 @@ import com.waracle.androidtest.features.cakelist.dataclasses.Cake;
 import java.util.ArrayList;
 
 public class CakeListLoader {
-    public @NonNull IO<Failable<ArrayList<Cake>>> loadCakes(boolean useCaches, CakeListLoadingContext context) {
+    public @NonNull IO<Failable<ArrayList<Cake>>> loadCakes(boolean useCaches, @NonNull CakeListLoadingContext context) {
         return context.jsonHttpDataLoader.loadJsonData(
                 context.cakeListUrl,
                 context.cakeListConverter,

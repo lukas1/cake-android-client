@@ -1,5 +1,6 @@
 package com.waracle.androidtest.shared.utils;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 /**
  * Created by Riad on 20/05/2015.
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class StreamUtils {
     private static final String TAG = StreamUtils.class.getSimpleName();
 
-    public static String readTextInputStream(InputStream stream, Charset charset) throws IOException {
+    public static @NonNull String readTextInputStream(@NonNull InputStream stream, @NonNull Charset charset) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream, charset));
         StringBuilder responseBuilder = new StringBuilder();
         String line;
@@ -26,7 +26,7 @@ public class StreamUtils {
         return responseBuilder.toString();
     }
 
-    public static void close(Closeable closeable) {
+    public static void close(@NonNull Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();

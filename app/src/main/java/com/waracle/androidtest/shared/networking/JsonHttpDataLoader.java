@@ -70,7 +70,7 @@ public final class JsonHttpDataLoader {
      * Returns the charset specified in the Content-Type of this header,
      * or the HTTP default (ISO-8859-1) if none can be found.
      */
-    public static String parseCharset(String contentType) {
+    public static @NonNull String parseCharset(String contentType) {
         if (contentType != null) {
             String[] params = contentType.split(",");
             for (int i = 1; i < params.length; i++) {

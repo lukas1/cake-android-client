@@ -33,7 +33,7 @@ public final class IO<T> {
         };
     }
 
-    public final <U> IO<U> map(@NonNull final Transform<T, U> transform) {
+    public final @NonNull <U> IO<U> map(@NonNull final Transform<T, U> transform) {
         return new IO<>(new IOOperation<U>() {
             @NonNull
             @Override

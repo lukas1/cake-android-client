@@ -40,13 +40,4 @@ public final class Failable<T> {
             foldCallback.foldError(errorMessage);
         }
     }
-
-    public final <U> Failable<U> map(@NonNull final Transform<T, U> transform) {
-        if (value != null) {
-            return new Failable<>(transform.transform(value));
-        } else if (errorMessage != null) {
-            return new Failable<>(errorMessage);
-        }
-        return new Failable<>("Mapping failed");
-    }
 }

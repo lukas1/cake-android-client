@@ -11,8 +11,7 @@ import org.json.JSONObject;
 public final class CakeConvertor implements JsonObjectConvertor<Cake> {
 
     @Override
-    public @NonNull
-    Cake convertToDataClass(@NonNull JSONObject input) throws JSONException {
+    public @NonNull Cake convertToDataClass(@NonNull JSONObject input) throws JSONException {
         return new Cake(
                 input.getString("title"),
                 input.getString("desc"),

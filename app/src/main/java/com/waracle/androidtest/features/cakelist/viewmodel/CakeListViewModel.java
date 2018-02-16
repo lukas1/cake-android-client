@@ -13,12 +13,12 @@ public class CakeListViewModel {
     private final CakeListLoadingContext context;
     private final LiveData<ArrayList<Cake>> cakes = new LiveData<>();
 
-    public CakeListViewModel(CakeListLoadingContext context) {
+    public CakeListViewModel(@NonNull CakeListLoadingContext context) {
         this.context = context;
         loadCakes(true);
     }
 
-    public LiveData<ArrayList<Cake>> getCakes() {
+    public @NonNull LiveData<ArrayList<Cake>> getCakes() {
         return cakes;
     }
 

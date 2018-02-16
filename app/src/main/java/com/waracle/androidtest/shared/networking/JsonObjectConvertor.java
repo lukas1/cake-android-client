@@ -6,5 +6,5 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public interface JsonObjectConvertor<T> {
-    T convertToDataClass(@NonNull JSONObject input) throws JSONException;
+    @NonNull T convertToDataClass(@NonNull JSONObject input) throws JSONException;
 }
