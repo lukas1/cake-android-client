@@ -4,7 +4,6 @@ import android.app.Application;
 import android.net.http.HttpResponseCache;
 import android.util.Log;
 
-import com.waracle.androidtest.features.cakelist.ui.PlaceholderFragment;
 import com.waracle.androidtest.shared.utils.ImageLoader;
 
 import java.io.File;
@@ -15,7 +14,7 @@ import java.io.IOException;
  */
 
 public class CakeApplication extends Application {
-    private static final String TAG = PlaceholderFragment.class.getSimpleName();
+    private static final String TAG = CakeApplication.class.getSimpleName();
     private static CakeApplication appInstance = null;
 
     private final ImageLoader imageLoader = new ImageLoader();
