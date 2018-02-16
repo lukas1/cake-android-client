@@ -15,7 +15,7 @@ public class ImageListViewModel {
 
     public ImageListViewModel(ImageListLoadingContext context) {
         this.context = context;
-        loadImages();
+        loadImages(true);
     }
 
     public LiveData<ArrayList<ImageItem>> getImages() {
@@ -23,11 +23,11 @@ public class ImageListViewModel {
     }
 
     public void refresh() {
-        loadImages();
+        loadImages(false);
     }
 
-    private void loadImages() {
-        context.imageListLoader.loadImages(context).runAsync(new IO.IOCallback<Failable<ArrayList<ImageItem>>>() {
+    private void loadImages(boolean useCaches) {
+        context.imageListLoader.loadImages(useCaches, context).runAsync(new IO.IOCallback<Failable<ArrayList<ImageItem>>>() {
             @Override
             public void callback(@NonNull Failable<ArrayList<ImageItem>> value) {
                 value.fold(new Failable.FailableFoldCallback<ArrayList<ImageItem>>() {

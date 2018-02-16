@@ -19,13 +19,16 @@ import java.util.ArrayList;
 public final class JsonHttpDataLoader {
     public final @NonNull <T> IO<Failable<ArrayList<T>>> loadJsonData(
             @NonNull final String url,
-            @NonNull final JsonArrayConvertor<T> jsonArrayConvertor
+            @NonNull final JsonArrayConvertor<T> jsonArrayConvertor,
+            final boolean useCaches
     ) {
         return new IO<>(new IO.IOOperation<Failable<ArrayList<T>>>() {
             @Override
             public @NonNull Failable<ArrayList<T>> doIOOperation() {
                 try {
-                    return doHttpCall(UrlConnectionUtils.createConnection(url), jsonArrayConvertor);
+                    return doHttpCall(
+                            UrlConnectionUtils.createConnection(url), jsonArrayConvertor, useCaches
+                    );
                 } catch (IOException exception) {
                     return new Failable(exception.getMessage());
                 }
@@ -35,14 +38,13 @@ public final class JsonHttpDataLoader {
 
     private static @NonNull <T> Failable<ArrayList<T>> doHttpCall(
             @NonNull HttpURLConnection urlConnection,
-            @NonNull final JsonArrayConvertor<T> jsonArrayConvertor
+            @NonNull final JsonArrayConvertor<T> jsonArrayConvertor,
+            final boolean useCaches
     ) {
-        // Most of this code should really be solved via Retrofit + OkHttp
+        // Most of this code should really be solved via Retrofit + OkHttp + Gson/Moshi
         try {
+            urlConnection.setUseCaches(useCaches);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-            // Can you think of a way to improve the performance of loading data
-            // using HTTP headers???
 
             // Also, Do you trust any utils thrown your way????
 

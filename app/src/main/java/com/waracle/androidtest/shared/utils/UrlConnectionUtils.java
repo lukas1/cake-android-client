@@ -2,7 +2,6 @@ package com.waracle.androidtest.shared.utils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -11,6 +10,6 @@ import java.net.URL;
 
 public final class UrlConnectionUtils {
     public static HttpURLConnection createConnection(String url) throws IOException {
-        return (HttpURLConnection) new URL(url).openConnection();
+        return  (HttpURLConnection) new URL(url).openConnection();
     }
 }

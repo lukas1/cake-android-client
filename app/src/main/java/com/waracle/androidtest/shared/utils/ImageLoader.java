@@ -14,9 +14,7 @@ import com.waracle.androidtest.shared.core.Transform;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 
 /**
  * Created by Riad on 20/05/2015.
@@ -89,15 +87,12 @@ public class ImageLoader {
         try {
             try {
                 // Read data from workstation
+                connection.setUseCaches(true);
                 inputStream = connection.getInputStream();
             } catch (IOException e) {
                 // Read the error from the workstation
                 inputStream = connection.getErrorStream();
             }
-
-            // Can you think of a way to make the entire
-            // HTTP more efficient using HTTP headers??
-
             return new Failable<>(StreamUtils.readUnknownFully(inputStream));
         } catch (IOException exception) {
             return new Failable<>(exception.getMessage());

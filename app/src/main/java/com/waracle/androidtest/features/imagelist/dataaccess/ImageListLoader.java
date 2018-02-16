@@ -10,10 +10,11 @@ import com.waracle.androidtest.features.imagelist.dataclasses.ImageItem;
 import java.util.ArrayList;
 
 public class ImageListLoader {
-    public @NonNull IO<Failable<ArrayList<ImageItem>>> loadImages(ImageListLoadingContext context) {
+    public @NonNull IO<Failable<ArrayList<ImageItem>>> loadImages(boolean useCaches, ImageListLoadingContext context) {
         return context.jsonHttpDataLoader.loadJsonData(
                 context.imageListUrl,
-                context.imageItemListConverter
+                context.imageItemListConverter,
+                useCaches
         );
     }
 }
