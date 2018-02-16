@@ -14,6 +14,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public final class JsonHttpDataLoader {
@@ -46,15 +47,13 @@ public final class JsonHttpDataLoader {
             urlConnection.setUseCaches(useCaches);
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-            // Also, Do you trust any utils thrown your way????
-
-            byte[] bytes = StreamUtils.readUnknownFully(in);
-
             // Read in charset of HTTP content.
-            String charset = parseCharset(urlConnection.getRequestProperty("Content-Type"));
+            Charset charset = Charset.forName(
+                    parseCharset(urlConnection.getRequestProperty("Content-Type"))
+            );
 
             // Convert byte array to appropriate encoded string.
-            String jsonText = new String(bytes, charset);
+            String jsonText = StreamUtils.readTextInputStream(in, charset);
 
             // Read string as JSON.
             JSONArray jsonArray = new JSONArray(jsonText);
