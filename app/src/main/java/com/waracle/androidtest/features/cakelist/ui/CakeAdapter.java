@@ -1,6 +1,5 @@
 package com.waracle.androidtest.features.cakelist.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,27 +46,41 @@ final class CakeAdapter extends BaseAdapter {
         return 0;
     }
 
-    @SuppressLint("ViewHolder")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View root = inflater.inflate(R.layout.list_item_layout, parent, false);
-        if (root != null) {
-            TextView title = root.findViewById(R.id.title);
-            TextView desc = root.findViewById(R.id.desc);
-            ImageView image = root.findViewById(R.id.image);
+        ViewHolder viewHolder;
 
-            Cake cake = getItem(position);
-            title.setText(cake.getTitle());
-            desc.setText(cake.getDescription());
-            imageLoader.load(cake.getImageUrl(), new WeakReference(image));
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.list_item_layout, parent, false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        return root;
+        Cake cake = getItem(position);
+        viewHolder.title.setText(cake.getTitle());
+        viewHolder.desc.setText(cake.getDescription());
+        viewHolder.image.setImageBitmap(null);
+        imageLoader.load(cake.getImageUrl(), new WeakReference(viewHolder.image));
+
+        return convertView;
     }
 
     public void setItems(ArrayList<Cake> items) {
         this.items = items;
         notifyDataSetChanged();
+    }
+
+    private class ViewHolder {
+        TextView title;
+        TextView desc;
+        ImageView image;
+
+        ViewHolder(View view) {
+            title = view.findViewById(R.id.title);
+            desc = view.findViewById(R.id.desc);
+            image = view.findViewById(R.id.image);
+        }
     }
 }
